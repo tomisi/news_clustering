@@ -1,0 +1,97 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clustered News Articles</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .cluster {
+            margin-bottom: 30px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Latest Stories</h1>
+    </header>
+
+    <div class="container" id="clusters"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.get('/get_news', function(data) {
+                displayClusters(data);
+            });
+        });
+
+        function displayClusters(data) {
+            var clustersDiv = $('#clusters');
+
+            // Create a dictionary to store articles based on clusters
+            var clusterArticles = {};
+            for (var i = 0; i < data.length; i++) {
+                var article = data[i];
+                var cluster = article.cluster;
+
+                if (!clusterArticles[cluster]) {
+                    clusterArticles[cluster] = [];
+                }
+
+                clusterArticles[cluster].push(article);
+            }
+
+            // Display articles for each cluster
+            for (var cluster in clusterArticles) {
+                var categoryName = getClusterCategoryName(cluster);
+                clustersDiv.append('<div class="cluster" id="cluster_' + cluster + '"><h2>' + categoryName + '</h2><ul></ul></div>');
+
+                var clusterDiv = $('#cluster_' + cluster + ' ul');
+                var articles = clusterArticles[cluster];
+                for (var j = 0; j < articles.length; j++) {
+                    var article = articles[j];
+                    clusterDiv.append('<li><strong><a href="' + article.url + '" target="_blank">' + article.title + '</a></strong><br>' + article.description + '</li>');
+
+                    // Check if 'imageUrl' is available and display the image
+                    if (article.imageUrl) {
+                        clusterDiv.append('<img src="' + article.imageUrl + '" alt="' + article.title + '" style="max-width: 100%; max-height: 150px; margin-top: 10px;">');
+                    }
+                }
+            }
+        }
+
+        function getClusterCategoryName(cluster) {
+            var categoryNames = ['Technology', 'Business', 'Science'];
+            return categoryNames[cluster % categoryNames.length];
+        }
+    </script>
+</body>
+</html>
