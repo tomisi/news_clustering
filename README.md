@@ -2,22 +2,14 @@
 
 ## Overview
 
-This project is a News Clustering Application built using Python and Flask. The application leverages the Streamlit framework for the [user interface](#usage) and employs [unsupervised learning techniques](#overview) to cluster news articles based on their content.
+The News Clustering App is a web-based application that clusters news articles based on their content similarity. It utilizes a clustering algorithm to group related articles, providing users with an organized view of news topics.
 
-## Table of Contents
+## Features
 
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Deployment](#deployment)
-  - [Local Deployment](#local-deployment)
-  - [Google Cloud Platform Deployment](#google-cloud-platform-deployment)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Getting Started
-
+- **Clustering Algorithm:** The application employs a clustering algorithm (e.g., K-Means) to group news articles based on content similarity.
+- **Streamlit UI:** The user interface is built using Streamlit, making it interactive and easy to navigate.
+- **Top Headlines:** Fetches and displays top headlines from a specified source, providing up-to-date information.
+  
 ### Prerequisites
 
 - Python (>=3.7)
