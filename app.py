@@ -1,11 +1,21 @@
-# app.py
-from flask import Flask, render_template, jsonify
-import requests
+from requests.exceptions import ConnectionError, RequestException 
 from sklearn.feature_extraction.text import TfidfVectorizer
+from flask import Flask, render_template, jsonify, request
 from sklearn.cluster import KMeans
+from dotenv import load_dotenv
+from flask_cors import CORS
+import requests
 import traceback
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
+CORS(app) 
+
+# Get environment variables
+app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', False)
+
 
 @app.route('/')
 def index():
@@ -14,17 +24,19 @@ def index():
 @app.route('/get_news')
 def get_news():
     api_key = 'a10ddfd94f374f63ad87937dcec8985d'
-    url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}&pageSize=20'  # Fetch top 20 headlines for Nigeria
-    
+    country = request.args.get('country', 'us')  # Default to 'us' if country is not provided
+    url = f'https://newsapi.org/v2/top-headlines?country={country}&apiKey={api_key}&pageSize=20'
+
     try:
         response = requests.get(url)
+        response.raise_for_status()  # Raise an error for HTTP errors (4xx and 5xx)
         data = response.json()
 
         # Check if 'articles' key exists in the response
         if 'articles' not in data:
             return jsonify({'error': 'No articles found'})
 
-        # Extract article details including title, descripion, URL, and image URL
+        # Extract article details including title, description, URL, and image URL
         articles = [{'title': article['title'], 
                      'description': article['description'], 
                      'url': article['url'], 
@@ -47,6 +59,10 @@ def get_news():
 
         return jsonify(articles)
 
+    except ConnectionError as ce:
+        return jsonify({'error': f'Connection error: {ce}'})
+    except RequestException as re:
+        return jsonify({'error': f'Request exception: {re}'})
     except Exception as e:
         traceback.print_exc()
         return jsonify({'error': str(e)})
