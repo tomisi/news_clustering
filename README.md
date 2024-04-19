@@ -13,7 +13,6 @@ The News Clustering App is a web-based application that clusters news articles b
 ### Prerequisites
 
 - Python (>=3.7)
-- Streanlite
 
 Contributing
 If you'd like to contribute to this project, feel free to open issues and pull requests.
