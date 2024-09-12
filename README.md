@@ -6,9 +6,9 @@ The News Clustering App is a web-based application that clusters news articles b
 
 ## Features
 
-- **Clustering Algorithm:** The application employs the clustering algorithm K-Means to group news articles based on content similarity.
+- **Clustering Algorithm:** I used the clustering algorithm K-Means to group news articles based on content similarity.
 - **Streamlit UI:** The user interface is built using Streamlit, making it interactive and easy to navigate.
-- **Top Headlines:** Fetches and displays top headlines from a specified source, providing up-to-date information.
+- **Top Headlines:** Fetches and displays top headlines from various sources, providing up-to-date information.
   
 ### Prerequisites
 
